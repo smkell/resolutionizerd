@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 )
@@ -18,7 +18,9 @@ func init() {
 
 func main() {
 	flag.Parse()
-	log.Printf("resolutionizerd %s starting...", VERSION)
+	fmt.Printf("resolutionizerd %s starting...", VERSION)
+	fmt.Printf("listening on port %s", os.Getenv("PORT"))
+	fmt.Printf("client root: %s", clientDir)
 
-	log.Fatalln(http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))))
+	fmt.Fatalln(http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))))
 }
