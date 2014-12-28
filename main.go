@@ -18,11 +18,17 @@ func init() {
 
 func main() {
 	flag.Parse()
-	fmt.Printf("resolutionizerd %s starting...", VERSION)
-	fmt.Printf("listening on port %s", os.Getenv("PORT"))
-	fmt.Printf("client root: %s", clientDir)
+	fmt.Printf("resolutionizerd %s starting...\n", VERSION)
+	fmt.Printf("listening on port %s\n", os.Getenv("PORT"))
+	fmt.Printf("client root: %s\n", clientDir)
 
-	if err := http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))); err != nil {
+	if _, err := os.Stat(clientDir); err != nil {
+		fmt.Println(err)
+	}
+
+	http.Handle("/", http.FileServer(http.Dir(clientDir)))
+
+	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
