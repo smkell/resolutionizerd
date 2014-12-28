@@ -12,8 +12,8 @@ const VERSION = "0.1.0"
 var clientDir string
 
 func init() {
-	clientEnv = os.Getenv("CLIENT")
-	flag.StringVar(&clientDir, "client", clientDir, "the directory where the client data is stored")
+	clientEnv := os.Getenv("CLIENT")
+	flag.StringVar(&clientDir, "client", clientEnv, "the directory where the client data is stored")
 }
 
 func main() {
