@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
-	"github.com/gorilla/handlers"
 )
 
 const VERSION = "0.1.0"
@@ -32,11 +32,25 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-	
-	http.Handle("/", handlers.CombinedLoggingHandler(os.Stdout, http.FileServer(http.Dir(clientDir))))
+
+	http.Handle("/", LoggingHandler(os.Stdout, http.FileServer(http.Dir(clientDir))))
 
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
+}
+
+type loggingHandler struct {
+	writer  io.Writer
+	handler http.Handler
+}
+
+func (h loggingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(h.writer, "%s %s %s", r.Method, r.RequestURI, r.Header.Get("User-Agent"))
+	h.handler.ServeHTTP(w, r)
+}
+
+func LoggingHandler(w io.Writer, h http.Handler) http.Handler {
+	return loggingHandler{w, h}
 }
