@@ -20,7 +20,12 @@ func main() {
 	flag.Parse()
 	fmt.Printf("resolutionizerd %s starting...\n", VERSION)
 	fmt.Printf("listening on port %s\n", os.Getenv("PORT"))
+	fmt.Printf("client environment variable setting: %s\n", os.Getenv("CLIENT"))
 	fmt.Printf("client root: %s\n", clientDir)
+
+	if clientDir == "" {
+		clientDir = os.Getenv("CLIENT")
+	}
 
 	if _, err := os.Stat(clientDir); err != nil {
 		fmt.Println(err)
