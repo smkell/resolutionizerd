@@ -47,7 +47,7 @@ type loggingHandler struct {
 }
 
 func (h loggingHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(h.writer, "%s %s %s", r.Method, r.RequestURI, r.Header.Get("User-Agent"))
+	fmt.Fprintf(h.writer, "%s %-50s %s\n", r.Method, r.RequestURI, r.Header.Get("User-Agent"))
 	h.handler.ServeHTTP(w, r)
 }
 
