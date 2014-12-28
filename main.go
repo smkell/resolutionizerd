@@ -22,5 +22,8 @@ func main() {
 	fmt.Printf("listening on port %s", os.Getenv("PORT"))
 	fmt.Printf("client root: %s", clientDir)
 
-	fmt.Fatalln(http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))))
+	if err := http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
 }
