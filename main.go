@@ -12,10 +12,12 @@ const VERSION = "0.1.0"
 var clientDir string
 
 func init() {
-	flag.StringVar(&clientDir, "client", "./client", "the directory where the client data is stored")
+	clientEnv = os.Getenv("CLIENT")
+	flag.StringVar(&clientDir, "client", clientDir, "the directory where the client data is stored")
 }
 
 func main() {
+	flag.Parse()
 	log.Printf("resolutionizerd %s starting...", VERSION)
 
 	log.Fatalln(http.ListenAndServe(":"+os.Getenv("PORT"), http.FileServer(http.Dir(clientDir))))
