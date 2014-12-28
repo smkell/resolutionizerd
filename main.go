@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"github.com/gorilla/handlers"
 )
 
 const VERSION = "0.1.0"
@@ -31,8 +32,8 @@ func main() {
 		fmt.Println(err)
 		os.Exit(1)
 	}
-
-	http.Handle("/", http.FileServer(http.Dir(clientDir)))
+	
+	http.Handle("/", handlers.CombinedLoggingHandler(os.Stdout, http.FileServer(http.Dir(clientDir))))
 
 	if err := http.ListenAndServe(":"+os.Getenv("PORT"), nil); err != nil {
 		fmt.Println(err)
